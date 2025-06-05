@@ -2,12 +2,12 @@ from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col, sum, desc, round
 
 class SalesAnalysis:
-
-    # Task 1: Create SparkSession for app "Sales Data Analysis"
-    def init_spark_session(self) -> SparkSession:
-        pass
-
+    
     def __init__(self, spark: SparkSession):
+        self.spark = spark
+    # Task 1: Create SparkSession for app "Sales Data Analysis"
+
+    def init_spark_session(self) -> SparkSession:
         pass
 
     # Task 2: Load CSV file from local storage as DataFrame
