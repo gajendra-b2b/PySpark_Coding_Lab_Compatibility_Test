@@ -8,7 +8,7 @@ spark = SparkSession.builder.master("local").appName("Test Sales").getOrCreate()
 job = SalesAnalysis(spark)
 
 # Load test data
-DATA_PATH = "../../data/products.csv"
+DATA_PATH = "data/products.csv"
 def load_data(path):
     return spark.read.csv(path, header=True, inferSchema=True)
 
@@ -30,11 +30,20 @@ def test_load_data():
     assert "product" in df.columns
 
 @pytest.mark.filterwarnings("ignore")
-def test_display_schema():
-    # Task 3: Schema should include expected fields
-    schema_fields = set(field.name for field in df.schema.fields)
-    assert {"product_id", "product", "country", "sales"}.issubset(schema_fields)
+def test_display_schema(capfd):
+    # Act: Call the method
+    job.display_schema(df)
 
+    # Capture the printed output
+    out, _ = capfd.readouterr()
+
+    # Assert: Check if output contains schema fields — proving df.printSchema() was called
+    assert "root" in out  # typical start of Spark schema print
+    assert "product_id" in out
+    assert "product" in out
+    assert "country" in out
+    assert "sales" in out
+    
 @pytest.mark.filterwarnings("ignore")
 def test_filter_by_country():
     # Task 4: Should only return rows with country == Germany
